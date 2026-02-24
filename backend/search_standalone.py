@@ -261,8 +261,22 @@ from qdrant_client.http.models import Filter, FieldCondition, MatchValue
 
 # ... (existing imports)
 
-# In-memory store for opted-out shops (names or URLs)
+# Persistent store for opted-out shops (names or URLs)
+BLACKLIST_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "blacklist.txt")
 OPTED_OUT_SHOPS = set()
+
+def load_blacklist():
+    global OPTED_OUT_SHOPS
+    if os.path.exists(BLACKLIST_PATH):
+        with open(BLACKLIST_PATH, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#"):
+                    OPTED_OUT_SHOPS.add(line)
+    logging.info(f"--- [DEBUG] Blacklist loaded: {len(OPTED_OUT_SHOPS)} entries ---")
+
+# Initial load
+load_blacklist()
 
 class OptOutRequest(BaseModel):
     shopUrl: str
@@ -313,6 +327,13 @@ async def opt_out(req: OptOutRequest, background_tasks: BackgroundTasks):
         
         logging.info(f"--- [DEBUG] Opted out: {identifier} (Total: {len(OPTED_OUT_SHOPS)}) ---")
         
+        # Save to blacklist.txt for persistence
+        try:
+            with open(BLACKLIST_PATH, "a", encoding="utf-8") as f:
+                f.write(f"{identifier}\n")
+        except Exception as e:
+            logging.error(f"Failed to save to blacklist.txt: {e}")
+
         # Dispatch background task for email
         background_tasks.add_task(send_opt_out_email, identifier)
         

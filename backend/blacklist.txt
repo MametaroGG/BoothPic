@@ -1,0 +1,3 @@
+# BOOTH-Lens Shop Blacklist
+# Add shop names or URLs here to exclude them from search results.
+# Format: one shop name or URL per line.

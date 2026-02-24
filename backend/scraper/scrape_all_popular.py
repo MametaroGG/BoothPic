@@ -63,6 +63,26 @@ IMAGES_DIR = DATA_DIR / "raw_images"
 PHASE1_OUTPUT = DATA_DIR / "popular_items_list.jsonl"
 PHASE2_OUTPUT = DATA_DIR / "popular_items_full.jsonl"
 PROGRESS_FILE = DATA_DIR / "scrape_progress.json"
+BLACKLIST_FILE = SCRIPT_DIR.parent / "blacklist.txt" # backend/blacklist.txt
+BLACKLISTED_SHOPS = set()
+
+def load_blacklist():
+    global BLACKLISTED_SHOPS
+    if BLACKLIST_FILE.exists():
+        with open(BLACKLIST_FILE, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#"):
+                    BLACKLISTED_SHOPS.add(line.lower())
+    logger.info(f"Blacklist loaded: {len(BLACKLISTED_SHOPS)} entries")
+
+def is_blacklisted(shop_name, shop_url):
+    name_l = shop_name.lower()
+    url_l = shop_url.lower()
+    for entry in BLACKLISTED_SHOPS:
+        if entry in name_l or entry in url_l:
+            return True
+    return False
 
 # HTTP
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
@@ -449,6 +469,10 @@ def phase1_collect_urls():
                         shop_name = shop_el.inner_text().strip() if shop_el.count() > 0 else ""
                         shop_url = shop_el.get_attribute('href') if shop_el.count() > 0 else ""
 
+                        if is_blacklisted(shop_name, item_url):
+                            logger.debug(f"  Skipping blacklisted shop/item: {shop_name} - {item_url}")
+                            continue
+
                         item_data = {
                             "item_id": item_id,
                             "url": item_url,
@@ -795,6 +819,7 @@ def main():
     logger.info(f"  Image: {IMAGE_MAX_SIZE}px {IMAGE_FORMAT} q={IMAGE_QUALITY}")
     logger.info(f"  R2: {'ENABLED → ' + R2_BUCKET if R2_ENABLED else 'DISABLED'}")
     logger.info("=" * 60)
+    load_blacklist()
 
     mode = sys.argv[1] if len(sys.argv) > 1 else "all"
 
