@@ -102,7 +102,7 @@ export const translations = {
                 },
                 {
                     title: "4. AI Usage and Accuracy",
-                    content: "This Service utilizes AI models (CLIP and YOLO) to analyze visual features. While the Shop strives for high accuracy, search results are generated algorithmically. We do not guarantee that results will always be 100% accurate."
+                    content: "This Service utilizes AI models (CLIP) to analyze visual features. While the Shop strives for high accuracy, search results are generated algorithmically. We do not guarantee that results will always be 100% accurate."
                 },
                 {
                     title: "5. Shop Owner Rights & Opt-out",
@@ -120,19 +120,19 @@ export const translations = {
             sections: [
                 {
                     title: "1. Information We Collect",
-                    content: "To provide the best searching experience, the Shop collects the following types of information:\n\n• Images uploaded for search: Used temporarily for analysis and deleted shortly after processing.\n• Email and Payment Data: Collected via Stripe for Premium subscribers. The Shop never stores credit card details directly on our servers.\n• Usage Logs: Anonymous data such as search timestamps and browser types to improve our AI performance."
+                    content: "To provide the best searching experience, the Shop collects the following types of information:\n\n• Images uploaded for search: Used temporarily for analysis and deleted shortly after processing.\n• Usage Logs: Anonymous data such as search timestamps and browser types to improve our AI performance."
                 },
                 {
                     title: "2. Purpose of Information Use",
-                    content: "The collected information is used strictly for the following purposes:\n\n• Executing image-based product searches.\n• Managing subscriptions and processing payments via Stripe.\n• Preventing unauthorized use and maintaining server security.\n• Analyzing anonymous data to refine our search algorithms."
+                    content: "The collected information is used strictly for the following purposes:\n\n• Executing image-based product searches.\n• Preventing unauthorized use and maintaining server security.\n• Analyzing anonymous data to refine our search algorithms."
                 },
                 {
                     title: "3. Third-Party Data Sharing",
-                    content: "The Shop does not sell your personal information. Data is shared with third parties only when necessary:\n\n• Stripe: For secure payment processing (handled under Stripe's privacy policy).\n• Cloudflare: For secure image data transmission and hosting (handled under Cloudflare's privacy policy)."
+                    content: "The Shop does not sell your personal information. Data is shared with third parties only when necessary:\n\n• Cloudflare: For secure image data transmission and hosting (handled under Cloudflare's privacy policy)."
                 },
                 {
-                    title: "4. Cookies and Session Data",
-                    content: "This Service uses cookies to remember your language preferences and maintain search sessions. You can disable cookies in your browser settings, though some features may not function correctly."
+                    title: "4. Cookies and Tracking",
+                    content: "This Service does not use cookies to track personal information or user behavior. Any data saved locally is strictly limited to user preferences, such as language settings, which are stored within the browser."
                 }
             ]
         }
@@ -240,7 +240,7 @@ export const translations = {
                 },
                 {
                     title: "4. AIによる解析の特性と免責",
-                    content: "本サービスはAIモデル（CLIPおよびYOLO）を用いて解析を行います。精度の向上に努めておりますが、結果はアルゴリズムにより自動生成されるため、常に100%の正確性やユーザーの期待との一致を当ショップが保証するものではありません。"
+                    content: "本サービスはAIモデル（CLIP）を用いて解析を行います。精度の向上に努めておりますが、結果はアルゴリズムにより自動生成されるため、常に100%の正確性やユーザーの期待との一致を当ショップが保証するものではありません。"
                 },
                 {
                     title: "5. ショップオーナーの権利とオプトアウト",
@@ -258,19 +258,19 @@ export const translations = {
             sections: [
                 {
                     title: "1. 取得する情報",
-                    content: "当ショップでは、以下の情報を取得・利用します：\n\n・検索のためにアップロードされた画像：解析のために一時的に使用され、処理完了後速やかに破棄されます。\n・メールアドレスおよび決済情報：有料プランご契約時にStripeを通じて取得します。クレジットカード情報は当ショップのサーバーには保存されません。\n・利用ログ：AIの精度向上およびセキュリティ維持のため、匿名化された検索日時やブラウザ情報を記録します。"
+                    content: "当ショップでは、以下の情報を取得・利用します：\n\n・検索のためにアップロードされた画像：解析のために一時的に使用され、処理完了後速やかに破棄されます。\n・利用ログ：AIの精度向上およびセキュリティ維持のため、匿名化された検索日時やブラウザ情報を記録します。"
                 },
                 {
                     title: "2. 利用目的",
-                    content: "取得した情報は、以下の目的のみに使用します：\n\n・画像を用いた商品検索機能の提供。\n・有料プランの購読管理およびStripeを通じた決済処理。\n・不正アクセスの防止およびサーバーの安定稼働。\n・統計データの分析による、検索アルゴリズムの改善。"
+                    content: "取得した情報は、以下の目的のみに使用します：\n\n・画像を用いた商品検索機能の提供。\n・不正アクセスの防止およびサーバーの安定稼働。\n・統計データの分析による、検索アルゴリズムの改善。"
                 },
                 {
                     title: "3. 第三者への情報提供",
-                    content: "当ショップはユーザーの個人情報を販売しません。以下の場合を除き、本人の同意なく第三者に提供することはありません：\n\n・Stripe：安全な決済処理を委託するため（Stripeのプライバシーポリシーに従い運営されます）。\n・Cloudflare：画像の安全な転送およびホスティングのため（Cloudflareのプライバシーポリシーに従い運営されます）。"
+                    content: "当ショップはユーザーの個人情報を販売しません。以下の場合を除き、本人の同意なく第三者に提供することはありません：\n\n・Cloudflare：画像の安全な転送およびホスティングのため（Cloudflareのプライバシーポリシーに従い運営されます）。"
                 },
                 {
-                    title: "4. クッキー（Cookie）とセッションデータ",
-                    content: "本サービスでは、言語設定の保存やセッション維持のためにクッキーを利用します。ブラウザの設定でクッキーを無効にすることも可能ですが、一部の機能が制限される場合があります。"
+                    title: "4. クッキー（Cookie）やトラッキングについて",
+                    content: "本サービスでは、個人の行動を追跡するためのクッキーやトラッキング技術は使用していません。言語設定などのユーザーの環境設定についてのみ、ブラウザ上のローカルデータとして保存される場合があります。"
                 }
             ]
         }
