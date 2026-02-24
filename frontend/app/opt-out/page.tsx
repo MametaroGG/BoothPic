@@ -1,29 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import axios from "axios";
 import { useLanguage } from "../context/LanguageContext";
 import LanguageSwitcher from "../components/LanguageSwitcher";
-import { Search, ShieldCheck, Mail, AlertCircle, ChevronLeft } from "lucide-react";
+import { Search, ShieldCheck, ExternalLink, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
 export default function OptOutPage() {
-    const [shopUrl, setShopUrl] = useState("");
-    const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
     const { t } = useLanguage();
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setStatus("loading");
-        try {
-            await axios.post("/api/opt-out", { shopUrl });
-            setStatus("success");
-            setShopUrl(""); // Clear input on success
-        } catch (err) {
-            console.error(err);
-            setStatus("error");
-        }
-    };
 
     return (
         <main className="flex min-h-screen flex-col items-center relative overflow-hidden bg-background selection:bg-blue-500/30">
@@ -57,49 +40,17 @@ export default function OptOutPage() {
                         {t.optOut.description}
                     </p>
 
-                    <form onSubmit={handleSubmit} className="space-y-8">
-                        <div className="space-y-3">
-                            <label className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] ml-2">
-                                {t.optOut.label}
-                            </label>
-                            <div className="relative group">
-                                <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-blue-500 transition-colors">
-                                    <Search size={18} />
-                                </div>
-                                <input
-                                    type="url"
-                                    required
-                                    placeholder={t.optOut.placeholder}
-                                    value={shopUrl}
-                                    onChange={(e) => setShopUrl(e.target.value)}
-                                    className="w-full pl-14 pr-6 py-5 bg-black/40 border border-white/5 rounded-2xl text-white font-bold placeholder:text-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
-                                />
-                            </div>
-                        </div>
-
-                        <button
-                            type="submit"
-                            disabled={status === "loading" || status === "success"}
-                            className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-zinc-800 disabled:text-zinc-500 text-white font-black tracking-widest uppercase py-5 rounded-2xl transition-all shadow-xl shadow-blue-500/20 active:scale-95 flex items-center justify-center gap-3"
+                    <div className="flex justify-center mb-8">
+                        <a
+                            href="https://mametarovv.booth.pm/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black tracking-widest uppercase py-5 rounded-2xl transition-all shadow-xl shadow-blue-500/20 active:scale-95 flex items-center justify-center gap-3"
                         >
-                            <Mail size={18} strokeWidth={3} />
-                            {status === "loading" ? t.common.submitting : status === "success" ? t.common.submitted : t.common.submit}
-                        </button>
-
-                        {status === "success" && (
-                            <div className="p-5 bg-green-500/10 text-green-400 text-sm font-bold rounded-2xl border border-green-500/20 flex items-center gap-4 animate-in fade-in slide-in-from-top-4">
-                                <ShieldCheck size={24} />
-                                {t.optOut.success}
-                            </div>
-                        )}
-
-                        {status === "error" && (
-                            <div className="p-5 bg-red-500/10 text-red-400 text-sm font-bold rounded-2xl border border-red-500/20 flex items-center gap-4 animate-in shake">
-                                <AlertCircle size={24} />
-                                {t.optOut.failed}
-                            </div>
-                        )}
-                    </form>
+                            <ExternalLink size={18} strokeWidth={3} />
+                            {t.optOut.buttonText}
+                        </a>
+                    </div>
 
                     <div className="mt-12 text-center">
                         <Link href="/" className="text-xs font-black text-zinc-600 hover:text-white uppercase tracking-widest transition-colors flex items-center justify-center gap-2">

@@ -76,12 +76,9 @@ export const translations = {
             },
         },
         optOut: {
-            title: "Opt-out Request",
-            description: "If you are a shop owner and wish to remove your items from BOOTH-Lens search results, please enter your shop URL below. Processing takes up to 48 hours.",
-            label: "BOOTH Shop URL",
-            placeholder: "https://your-shop.booth.pm",
-            success: "Request submitted successfully. We will process it shortly.",
-            failed: "Failed to submit request. Please try again.",
+            title: "Opt-Out Request",
+            description: "If you are a shop owner and wish to remove your items from BOOTH-Lens search results, please send us a direct message on BOOTH. We will process your request within 48 hours.",
+            buttonText: "Send Message on BOOTH",
         },
         terms: {
             title: "Terms of Service",
@@ -215,11 +212,8 @@ export const translations = {
         },
         optOut: {
             title: "オプトアウト申請",
-            description: "ショップオーナー様で、BOOTH-Lens検索結果からの除外をご希望の場合は、以下のフォームにショップURLを入力してください。対応には最大48時間かかります。",
-            label: "BOOTH ショップURL",
-            placeholder: "https://your-shop.booth.pm",
-            success: "申請を受け付けました。順次対応いたします。",
-            failed: "申請の送信に失敗しました。もう一度お試しください。",
+            description: "ショップオーナー様で、BOOTH-Lens検索結果からの除外をご希望の場合は、お手数ですがBOOTHのメッセージ機能よりご連絡ください。対応には最大48時間かかります。",
+            buttonText: "BOOTHでメッセージを送る",
         },
         terms: {
             title: "利用規約",
