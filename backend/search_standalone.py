@@ -180,6 +180,13 @@ async def seed_data():
                         continue
                     processed_urls.add(item["url"])
 
+                    # Check if this shop/item is blacklisted before indexing
+                    current_ids = get_booth_identifiers(item["url"])
+                    current_ids.add(item.get("shop", "").lower())
+                    if any(cid in OPTED_OUT_SHOPS for cid in current_ids):
+                         logging.info(f"--- [DEBUG] Skipping blacklisted item during seed: {item.get('title')} ---")
+                         continue
+
                     for img_rel_path in item["images"]:
                         try:
                             # Use a small sleep to throttle
@@ -273,8 +280,10 @@ def get_booth_identifiers(text: str):
     
     # 1. Direct Shop Subdomain (e.g. mame-shop.booth.pm)
     shop_match = re.search(r'https?://([\w-]+)\.booth\.pm', text)
-    if shop_match and shop_match.group(1) not in ('www', 'extension', 'manage'):
-        ids.add(shop_match.group(1).lower())
+    if shop_match:
+        sub = shop_match.group(1).lower()
+        if sub not in ('www', 'manage', 'accounts', 'pixiv', 'checkout'):
+            ids.add(sub)
     
     # 2. Item ID from path (e.g. booth.pm/ja/items/12345 or shop.booth.pm/items/12345)
     item_match = re.search(r'/items/(\d+)', text)

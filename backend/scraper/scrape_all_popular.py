@@ -84,9 +84,13 @@ def get_booth_identifiers(text: str):
     text = text.strip()
     if not text:
         return ids
+    # 1. Direct Shop Subdomain (e.g. mame-shop.booth.pm)
     shop_match = re.search(r'https?://([\w-]+)\.booth\.pm', text)
-    if shop_match and shop_match.group(1) not in ('www', 'extension', 'manage'):
-        ids.add(shop_match.group(1).lower())
+    if shop_match:
+        sub = shop_match.group(1).lower()
+        if sub not in ('www', 'manage', 'accounts', 'pixiv', 'checkout'):
+            ids.add(sub)
+    # 2. Item ID from path (e.g. booth.pm/ja/items/12345 or shop.booth.pm/items/12345)
     item_match = re.search(r'/items/(\d+)', text)
     if item_match:
         ids.add(item_match.group(1))
