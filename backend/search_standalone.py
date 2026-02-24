@@ -406,79 +406,7 @@ async def search_image(file: UploadFile = File(...)):
         logging.error(traceback.format_exc())
         raise HTTPException(status_code=500, detail=f"Server Error: {str(e)}")
 
-# ... (existing imports)
-import stripe
-import sqlite3
-import os
 
-# Configure Stripe
-stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
-STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
-
-# DB Path - adjust relative to search_standalone.py
-DB_PATH = "prisma/dev.db"
-
-# ... (existing code: app config, models, OPTED_OUT_SHOPS)
-
-@app.post("/api/subscription/webhook")
-async def stripe_webhook(request: Request):
-    payload = await request.body()
-    sig_header = request.headers.get("stripe-signature")
-
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, STRIPE_WEBHOOK_SECRET
-        )
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail="Invalid payload")
-    except stripe.error.SignatureVerificationError as e:
-        raise HTTPException(status_code=400, detail="Invalid signature")
-
-    if event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
-        # Extract metadata
-        user_id = session.get("metadata", {}).get("user_id")
-        stripe_customer_id = session.get("customer")
-        
-        if user_id:
-            logging.info(f"--- [Webhook] Updating user {user_id} to PREMIUM ---")
-            try:
-                conn = sqlite3.connect(DB_PATH)
-                cursor = conn.cursor()
-                # Update User plan to 'PREMIUM' and set stripeId
-                cursor.execute(
-                    "UPDATE User SET plan = ?, stripeId = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ?",
-                    ("PREMIUM", stripe_customer_id, user_id)
-                )
-                conn.commit()
-                conn.close()
-                logging.info(f"--- [Webhook] User {user_id} updated successfully ---")
-            except Exception as e:
-                logging.error(f"--- [Webhook] DB Error: {e} ---")
-                return {"status": "error", "message": str(e)}
-
-    elif event['type'] == 'customer.subscription.deleted':
-         # Downgrade to FREE
-         subscription = event['data']['object']
-         stripe_customer_id = subscription.get("customer")
-         
-         if stripe_customer_id:
-            logging.info(f"--- [Webhook] Downgrading customer {stripe_customer_id} to FREE ---")
-            try:
-                conn = sqlite3.connect(DB_PATH)
-                cursor = conn.cursor()
-                cursor.execute(
-                    "UPDATE User SET plan = ?, updatedAt = CURRENT_TIMESTAMP WHERE stripeId = ?",
-                    ("FREE", stripe_customer_id)
-                )
-                conn.commit()
-                conn.close()
-                logging.info(f"--- [Webhook] Customer {stripe_customer_id} downgraded successfully ---")
-            except Exception as e:
-                logging.error(f"--- [Webhook] DB Error: {e} ---")
-                return {"status": "error", "message": str(e)}
-
-    return {"status": "received"}
 
 @app.get("/")
 def root():
