@@ -32,7 +32,11 @@ logging.info("--- [DEBUG] Standalone Search API starting ---")
 
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
-app.mount("/api/images", StaticFiles(directory="scraper/data/raw_images"), name="images")
+
+# Ensure the directory exists before mounting to avoid RuntimeError
+images_dir = os.path.join(BASE_DIR, "scraper", "data", "raw_images")
+os.makedirs(images_dir, exist_ok=True)
+app.mount("/api/images", StaticFiles(directory=images_dir), name="images")
 
 COLLECTION_NAME = "booth_items"
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
