@@ -315,7 +315,9 @@ export default function Home() {
           </span>
         </div>
         <nav className="hidden md:flex items-center gap-1 p-1.5 bg-zinc-900/50 backdrop-blur-3xl rounded-2xl border border-white/5 shadow-2xl">
-          <a href="/pricing" className="text-xs font-bold text-zinc-400 hover:text-white px-4 py-2.5 rounded-xl transition-all hover:bg-white/5">{t.common.pricing}</a>
+          <a href="https://mametarovv.booth.pm/items/8024907" target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-zinc-400 hover:text-white px-4 py-2.5 rounded-xl transition-all hover:bg-white/5 flex items-center gap-1.5">
+            <span className="text-pink-500 text-sm">♥</span> {t.common.support}
+          </a>
           <a href="/opt-out" className="text-xs font-bold text-zinc-400 hover:text-white px-4 py-2.5 rounded-xl transition-all hover:bg-white/5">{t.common.optOut}</a>
           <div className="w-[1px] h-4 bg-white/10 mx-2" />
           <LanguageSwitcher />
@@ -326,7 +328,7 @@ export default function Home() {
       <section className="w-full max-w-5xl mt-24 mb-24 text-center px-6 z-10 relative">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 mb-8 animate-in fade-in slide-in-from-top-4 duration-1000">
           <Zap size={14} className="text-blue-400 fill-blue-400" />
-          <span className="text-[10px] font-black tracking-[0.2em] text-blue-400 uppercase">Version 2.0 Alpha</span>
+          <span className="text-[10px] font-black tracking-[0.2em] text-blue-400 uppercase">Version 1.0</span>
         </div>
 
         <h2 className="text-6xl md:text-8xl font-black tracking-[calc(-0.05em)] mb-8 leading-[0.9] text-white">

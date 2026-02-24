@@ -12,6 +12,7 @@ export const translations = {
             error: "Error",
             cancel: "Cancel",
             search: "Search",
+            support: "Support",
         },
         home: {
             titlePrimary: "Find",
@@ -149,6 +150,7 @@ export const translations = {
             error: "エラー",
             cancel: "キャンセル",
             search: "検索",
+            support: "支援する",
         },
         home: {
             titlePrimary: "理想の",

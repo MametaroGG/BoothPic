@@ -7,7 +7,7 @@ import uuid
 import torch
 import traceback
 import requests
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 from transformers import CLIPProcessor, CLIPModel
@@ -261,8 +261,33 @@ OPTED_OUT_SHOPS = set()
 class OptOutRequest(BaseModel):
     shopUrl: str
 
+import smtplib
+from email.message import EmailMessage
+
+def send_opt_out_email(identifier: str):
+    email_user = os.environ.get("EMAIL_USER")
+    email_pass = os.environ.get("EMAIL_PASSWORD")
+    if email_user and email_pass:
+        try:
+            msg = EmailMessage()
+            msg.set_content(f"A new opt-out request has been received for:\n\nShop Identifier: {identifier}\n\nPlease review and delete their data from the index if appropriate.")
+            msg['Subject'] = f'BOOTH-Lens Opt-out Request: {identifier}'
+            msg['From'] = email_user
+            msg['To'] = 'tyarity3@gmail.com'
+
+            server = smtplib.SMTP('smtp.gmail.com', 587)
+            server.starttls()
+            server.login(email_user, email_pass)
+            server.send_message(msg)
+            server.quit()
+            logging.info(f"--- [DEBUG] Opt-out email notification sent successfully for {identifier}. ---")
+        except Exception as e:
+            logging.error(f"--- [DEBUG] Failed to send opt-out email: {e} ---")
+    else:
+        logging.warning("--- [DEBUG] EMAIL_USER or EMAIL_PASSWORD not set. Opt-out email not sent. ---")
+
 @app.post("/api/opt-out")
-async def opt_out(req: OptOutRequest):
+async def opt_out(req: OptOutRequest, background_tasks: BackgroundTasks):
     """
     Registers a shop to be excluded from search results.
     Accepts a shop URL or name.
@@ -281,6 +306,10 @@ async def opt_out(req: OptOutRequest):
                  pass
         
         logging.info(f"--- [DEBUG] Opted out: {identifier} (Total: {len(OPTED_OUT_SHOPS)}) ---")
+        
+        # Dispatch background task for email
+        background_tasks.add_task(send_opt_out_email, identifier)
+        
         return {"status": "success", "message": f"Shop '{identifier}' has been opted out."}
     else:
         raise HTTPException(status_code=400, detail="Invalid shop identifier")
