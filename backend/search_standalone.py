@@ -416,9 +416,8 @@ async def search_image(file: UploadFile = File(...)):
         }
     except Exception as e:
         logging.error(f"FATAL SEARCH ERROR: {e}")
-        error_trace = traceback.format_exc()
-        logging.error(error_trace)
-        raise HTTPException(status_code=500, detail=f"Server Error Traceback:\n{error_trace}")
+        logging.error(traceback.format_exc())
+        raise HTTPException(status_code=500, detail=f"Server Error: {str(e)}")
 
 
 
