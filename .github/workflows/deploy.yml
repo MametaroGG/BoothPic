@@ -16,9 +16,6 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          rm -rf backend/scraper/data
-          rm -f backend/scraper/scraper.log
-          rm -f backend/scraper/debug_tmp.jpg
           git checkout --orphan hf-deploy
           
           # Ensure LFS is handled in the orphan branch

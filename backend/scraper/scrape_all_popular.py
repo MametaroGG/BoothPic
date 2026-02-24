@@ -53,6 +53,8 @@ IMAGE_MAX_SIZE = 512          # Max dimension (px) — CLIP uses 224x224 interna
 IMAGE_FORMAT = "WEBP"         # WebP is ~30-50% smaller than JPEG at same quality
 IMAGE_QUALITY = 60            # Aggressive but visually acceptable for thumbnails
 IMAGE_EXTENSION = ".webp"
+MAX_RUNTIME = 5 * 3600 - 600  # 5 hours minus 10 minutes buffer (in seconds)
+START_TIME = time.time()
 
 # Directories
 SCRIPT_DIR = Path(__file__).parent
@@ -204,6 +206,14 @@ def load_existing_items(filepath):
 
 def sleep_random(min_sec=0.5, max_sec=1.5):
     time.sleep(random.uniform(min_sec, max_sec))
+
+
+def check_timeout():
+    """Check if the execution has exceeded the maximum runtime."""
+    elapsed = time.time() - START_TIME
+    if elapsed > MAX_RUNTIME:
+        return True
+    return False
 
 
 # =============================================================================
@@ -477,6 +487,11 @@ def phase1_collect_urls():
 
                 progress["phase1_last_page"] = page_num
                 save_progress(progress)
+
+                if check_timeout():
+                    logger.warning(f"Maximum runtime reached ({MAX_RUNTIME}s). Stopping Phase 1.")
+                    break
+
                 sleep_random(2, 4)
 
             except Exception as e:
@@ -540,6 +555,12 @@ def phase2_collect_details():
                         save_progress(progress)
             
             sleep_random(0.5, 1.5)
+
+            if check_timeout():
+                # Note: threads might still finish their current task but no new ones will start easily
+                # This check inside process_item helps stop early.
+                return detail, detail.get("_total_image_bytes", 0) if detail else 0
+
             return detail, detail.get("_total_image_bytes", 0) if detail else 0
 
         except Exception as e:
