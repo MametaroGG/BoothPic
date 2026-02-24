@@ -71,8 +71,9 @@ print(f"--- [DEBUG] Device: {device} ---")
 
 # Initialize CLIP
 print("--- [DEBUG] Loading CLIP model ---")
+from transformers import CLIPImageProcessor
 model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32").to(device)
-processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+processor = CLIPImageProcessor.from_pretrained("openai/clip-vit-base-patch32")
 print("--- [DEBUG] CLIP loaded ---")
 
 # Initialize Qdrant (Cloud or In-Memory)
@@ -98,8 +99,8 @@ except Exception as e:
     print(f"--- [DEBUG] Collection check/create notice: {e} ---")
 
 def get_embedding(image: Image.Image):
-    # Ensure it's treated as a batch of 1 image explicitly to avoid tensor shape mismatch bugs in older transformers versions
-    inputs = processor(images=[image], return_tensors="pt", padding=True).to(device)
+    # Use image-only processing without padding to bypass the older transformers bug
+    inputs = processor(images=[image], return_tensors="pt").to(device)
     with torch.no_grad():
         outputs = model.get_image_features(**inputs)
     
