@@ -12,15 +12,17 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
-      - name: Remove large files
+      - name: Prep for HF push
         run: |
-          rm -rf backend/scraper/data
-          rm -f backend/scraper/scraper.log
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
+          rm -rf backend/scraper/data
+          rm -f backend/scraper/scraper.log
+          git checkout --orphan hf-deploy
           git add .
-          git commit -m "Remove large files for HF sync" || echo "No changes to commit"
+          git commit -m "Deploy to HF (clean history)"
       - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push --force https://mametarow:$HF_TOKEN@huggingface.co/spaces/mametarow/booth-lens-api-v2 main
+        run: |
+          git push --force https://mametarow:$HF_TOKEN@huggingface.co/spaces/mametarow/booth-lens-api-v2 hf-deploy:main
