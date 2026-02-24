@@ -17,8 +17,8 @@ export const translations = {
         home: {
             titlePrimary: "Find",
             titleAccent: "Perfect",
-            titleSecondary: "BOOTH Items.",
-            subtitle: "Upload an image to find the exact BOOTH items used.",
+            titleSecondary: " 3D Costumes.",
+            subtitle: "Upload an image to find the exact 3D costumes used.",
             uploadPlaceholder: "Click or drag image here",
             uploadSupport: "Supports JPG, PNG, WEBP",
             searchPlaceholder: "Describe what you are looking for...",
