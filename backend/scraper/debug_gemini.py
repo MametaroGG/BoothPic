@@ -8,7 +8,11 @@ from dotenv import load_dotenv
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
 
-api_key = "AIzaSyCzJWZQ4sAt4i3_i6AWpK-FHyR3gceU9kg"
+api_key = os.environ.get("GEMINI_API_KEY")
+if not api_key:
+    logging.error("GEMINI_API_KEY environment variable is not set.")
+    exit(1)
+
 genai.configure(api_key=api_key)
 print(f"GenAI Version: {genai.__version__}")
 model = genai.GenerativeModel('gemini-1.5-flash')
