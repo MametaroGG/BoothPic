@@ -1,0 +1,13 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logo_grad" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3B82F6"/>
+      <stop offset="1" stop-color="#4F46E5"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="128" fill="url(#logo_grad)"/>
+  <g transform="translate(128, 128) scale(10.66)">
+    <circle cx="11" cy="11" r="8" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

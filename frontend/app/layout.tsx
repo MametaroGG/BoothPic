@@ -8,6 +8,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "BOOTH-Lens",
   description: "Find VRChat Assets visually",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
