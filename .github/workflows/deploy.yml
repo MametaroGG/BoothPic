@@ -36,4 +36,4 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          git push --force https://mametarow:$HF_TOKEN@huggingface.co/spaces/mametarow/booth-pic-api hf-deploy:main
+          git push --force https://mametarow:$HF_TOKEN@huggingface.co/spaces/mametarow/booth-pic-api.git hf-deploy:main
