@@ -6,7 +6,7 @@ import ProductCard from "./components/ProductCard";
 import LanguageSwitcher from "./components/LanguageSwitcher";
 import Link from "next/link";
 import axios from "axios";
-import { Loader2, Search, Zap, Globe, Shield, Crop as CropIcon, Check, X } from "lucide-react";
+import { Loader2, Search, Zap, Globe, Shield, Crop as CropIcon, Check, X, Coffee } from "lucide-react";
 import { useLanguage } from "./context/LanguageContext";
 import ReactCrop, { type Crop, type PixelCrop, centerCrop, makeAspectCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
@@ -316,7 +316,7 @@ export default function Home() {
         </div>
         <nav className="hidden md:flex items-center gap-1 p-1.5 bg-zinc-900/50 backdrop-blur-3xl rounded-2xl border border-white/5 shadow-2xl">
           <a href="https://mametarovv.booth.pm/items/8024907" target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-zinc-400 hover:text-white px-4 py-2.5 rounded-xl transition-all hover:bg-white/5 flex items-center gap-1.5">
-            <span className="text-pink-500 text-sm">♥</span> {t.common.support}
+            <Coffee className="text-amber-500/80 w-4 h-4" strokeWidth={2.5} /> {t.common.support}
           </a>
           <a href="/opt-out" className="text-xs font-bold text-zinc-400 hover:text-white px-4 py-2.5 rounded-xl transition-all hover:bg-white/5">{t.common.optOut}</a>
           <div className="w-[1px] h-4 bg-white/10 mx-2" />

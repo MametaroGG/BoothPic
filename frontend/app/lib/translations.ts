@@ -36,7 +36,7 @@ export const translations = {
                 },
                 search: {
                     title: "Cross-Shop Search",
-                    desc: "Search across all authorized BOOTH shops simultaneously for VRChat assets and textures."
+                    desc: "Search across all authorized BOOTH shops simultaneously for 3D costumes."
                 },
                 secure: {
                     title: "Secure & Safe",
@@ -154,9 +154,9 @@ export const translations = {
         },
         home: {
             titlePrimary: "理想の",
-            titleAccent: "BOOTHアイテム",
+            titleAccent: "コスチューム",
             titleSecondary: "を、一瞬で見つける。",
-            subtitle: "画像をアップロードして、使用されているBOOTHアイテムを特定します。",
+            subtitle: "画像をアップロードして、使用されているコスチュームを特定します。",
             uploadPlaceholder: "ここをクリックまたは画像をドラッグ",
             uploadSupport: "JPG, PNG, WEBP 対応",
             searchPlaceholder: "何をお探しですか？",
@@ -174,7 +174,7 @@ export const translations = {
                 },
                 search: {
                     title: "広範なインデックス検索",
-                    desc: "BOOTH上の膨大な公開商品データを横断的に検索し、VRChatアセットやテクスチャを特定します。"
+                    desc: "BOOTH上の膨大な公開商品データを横断的に検索し、3D衣装やコスチュームを特定します。"
                 },
                 secure: {
                     title: "安全・安心",
