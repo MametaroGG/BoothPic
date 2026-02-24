@@ -1,3 +1,7 @@
-node_modules
 # Keep environment variables out of version control
 .env
+
+# Logs and local debug files
+*.log
+debug_tmp.jpg
+scraper/data/raw_images/

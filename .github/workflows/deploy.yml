@@ -20,8 +20,9 @@ jobs:
           
           # Ensure LFS is handled in the orphan branch
           git lfs install
-          # Check if pt files exist and track them
+          # Check if pt or jsonl files exist and track them
           find . -name "*.pt" -exec git lfs track {} +
+          find . -name "*.jsonl" -exec git lfs track {} +
           if [ -f ".gitattributes" ]; then
             git add .gitattributes
           fi
