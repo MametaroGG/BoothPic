@@ -73,14 +73,36 @@ def load_blacklist():
             for line in f:
                 line = line.strip()
                 if line and not line.startswith("#"):
+                    # Normalize everything in the blacklist
+                    BLACKLISTED_SHOPS.update(get_booth_identifiers(line))
                     BLACKLISTED_SHOPS.add(line.lower())
-    logger.info(f"Blacklist loaded: {len(BLACKLISTED_SHOPS)} entries")
+    logger.info(f"Blacklist loaded: {len(BLACKLISTED_SHOPS)} identifiers")
 
-def is_blacklisted(shop_name, shop_url):
-    name_l = shop_name.lower()
-    url_l = shop_url.lower()
-    for entry in BLACKLISTED_SHOPS:
-        if entry in name_l or entry in url_l:
+def get_booth_identifiers(text: str):
+    """Identical to backend/search_standalone.py normalization."""
+    ids = set()
+    text = text.strip()
+    if not text:
+        return ids
+    shop_match = re.search(r'https?://([\w-]+)\.booth\.pm', text)
+    if shop_match and shop_match.group(1) not in ('www', 'extension', 'manage'):
+        ids.add(shop_match.group(1).lower())
+    item_match = re.search(r'/items/(\d+)', text)
+    if item_match:
+        ids.add(item_match.group(1))
+    if text.isdigit():
+        ids.add(text)
+    if not text.startswith("http"):
+        ids.add(text.lower())
+    return ids
+
+def is_blacklisted(shop_name, item_url):
+    # Get IDs for the current item
+    current_ids = get_booth_identifiers(item_url)
+    current_ids.add(shop_name.lower())
+    
+    for cid in current_ids:
+        if cid in BLACKLISTED_SHOPS:
             return True
     return False
 

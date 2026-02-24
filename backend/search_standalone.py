@@ -261,6 +261,36 @@ from qdrant_client.http.models import Filter, FieldCondition, MatchValue
 
 # ... (existing imports)
 
+def get_booth_identifiers(text: str):
+    """
+    Extracts stable identifiers (Shop Subdomain, Item ID) from BOOTH URLs or text.
+    Returns a set of normalized strings.
+    """
+    ids = set()
+    text = text.strip()
+    if not text:
+        return ids
+    
+    # 1. Direct Shop Subdomain (e.g. mame-shop.booth.pm)
+    shop_match = re.search(r'https?://([\w-]+)\.booth\.pm', text)
+    if shop_match and shop_match.group(1) not in ('www', 'extension', 'manage'):
+        ids.add(shop_match.group(1).lower())
+    
+    # 2. Item ID from path (e.g. booth.pm/ja/items/12345 or shop.booth.pm/items/12345)
+    item_match = re.search(r'/items/(\d+)', text)
+    if item_match:
+        ids.add(item_match.group(1))
+    
+    # 3. Simple numeric ID
+    if text.isdigit():
+        ids.add(text)
+    
+    # 4. Fallback: if it's a slug or name part (lowercase)
+    if not text.startswith("http"):
+        ids.add(text.lower())
+        
+    return ids
+
 # Persistent store for opted-out shops (names or URLs)
 BLACKLIST_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "blacklist.txt")
 OPTED_OUT_SHOPS = set()
@@ -312,20 +342,17 @@ async def opt_out(req: OptOutRequest, background_tasks: BackgroundTasks):
     Registers a shop to be excluded from search results.
     Accepts a shop URL or name.
     """
-    # Simple normalization: strip whitespace
+    # Robust normalization: extract identifiers
     identifier = req.shopUrl.strip()
     if identifier:
-        OPTED_OUT_SHOPS.add(identifier)
-        # Also try to extract shop name from URL if it's a standard booth URL
-        # e.g. https://mame-shop.booth.pm/ -> mame-shop
-        if ".booth.pm" in identifier:
-             try:
-                 name_part = identifier.split("://")[-1].split(".booth.pm")[0]
-                 OPTED_OUT_SHOPS.add(name_part)
-             except:
-                 pass
+        new_ids = get_booth_identifiers(identifier)
+        for nid in new_ids:
+            OPTED_OUT_SHOPS.add(nid)
         
-        logging.info(f"--- [DEBUG] Opted out: {identifier} (Total: {len(OPTED_OUT_SHOPS)}) ---")
+        # Original fallback (just in case)
+        OPTED_OUT_SHOPS.add(identifier.lower())
+
+        logging.info(f"--- [DEBUG] Opted out: {identifier} -> IDs: {new_ids} (Total: {len(OPTED_OUT_SHOPS)}) ---")
         
         # Save to blacklist.txt for persistence
         try:
@@ -394,9 +421,18 @@ async def search_image(file: UploadFile = File(...)):
             
             conditions = []
             for excluded in OPTED_OUT_SHOPS:
+                # Match against shopName (subdomain) or boothUrl (contains ID)
+                # Note: MatchValue is an exact match for the field.
+                # However, our payload contains the FULL URL in 'boothUrl'.
+                # To be robust, we'd need 'must_not' to catch any item where
+                # ANY of our normalized IDs appear in the URL or shopName.
+                
+                # Filter by Shop Name (exact)
                 conditions.append(FieldCondition(key="shopName", match=MatchValue(value=excluded)))
-                # If we wanted to match URL too:
-                # conditions.append(FieldCondition(key="boothUrl", match=MatchValue(value=excluded)))
+                
+                # To filter by Item ID in the URL, we can't easily do substring match in Qdrant 
+                # without Regex index. For now, we'll rely on the Shop Name matching correctly.
+                # If 'excluded' is a numeric ID, we normally can't match it against the full URL.
             
             query_filter = Filter(must_not=conditions)
 
