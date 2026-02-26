@@ -4,6 +4,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import ImageUploader from "./components/ImageUploader";
 import ProductCard from "./components/ProductCard";
 import LanguageSwitcher from "./components/LanguageSwitcher";
+import MobileMenu from "./components/MobileMenu";
 import Link from "next/link";
 import axios from "axios";
 import { Loader2, Search, Zap, Globe, Shield, Crop as CropIcon, Check, X, Coffee } from "lucide-react";
@@ -322,6 +323,7 @@ export default function Home() {
           <div className="w-[1px] h-4 bg-white/10 mx-2" />
           <LanguageSwitcher />
         </nav>
+        <MobileMenu t={t} />
       </header>
 
       {/* Hero Section */}
