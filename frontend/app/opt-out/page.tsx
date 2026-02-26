@@ -45,10 +45,10 @@ export default function OptOutPage() {
                             href="https://mametarovv.booth.pm/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black tracking-widest uppercase py-5 rounded-2xl transition-all shadow-xl shadow-blue-500/20 active:scale-95 flex items-center justify-center gap-3"
+                            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black tracking-widest uppercase py-5 px-6 rounded-2xl transition-all shadow-xl shadow-blue-500/20 active:scale-95 flex items-center justify-center gap-3 text-center"
                         >
-                            <ExternalLink size={18} strokeWidth={3} />
-                            {t.optOut.buttonText}
+                            <ExternalLink size={18} strokeWidth={3} className="shrink-0" />
+                            <span className="text-sm md:text-base">{t.optOut.buttonText}</span>
                         </a>
                     </div>
 
